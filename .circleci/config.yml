@@ -25,7 +25,7 @@ dev-prep-steps: &dev-prep-steps
               name: 'preppin for dev'
               command: |
                   echo 'preppin for dev'
-                  apt-get update
+                  #apt-get update
                   #apt-get install ca-certificates -y
         - run:
               name: save env
@@ -46,7 +46,7 @@ stage-prep-steps: &stage-prep-steps
               name: 'preppin for stage'
               command: |
                   echo 'preppin for stage'
-                  apt-get update
+                  #apt-get update
                   #apt-get install ca-certificates -y
         - run:
               name: save env
