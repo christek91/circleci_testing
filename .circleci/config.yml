@@ -3,7 +3,7 @@ version: 2
 kitchen-executor: &kitchen-executor
     docker:
         #- image: ubuntu:14.04
-        - image: circleci/classic:latest
+        - image: circleci/python:latest
 
 set-dev-creds: &set-dev-creds
     name: creds for dev
