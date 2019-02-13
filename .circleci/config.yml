@@ -8,11 +8,13 @@ set-dev-creds: &set-dev-creds
     name: creds for dev
     command: |
         echo 'this is dev'
+        export POTATO=dev
 
 set-stage-creds: &set-stage-creds
     name: creds for stage
     command: |
         echo 'this is stage'
+        export POTATO=stage
 
 dev-prep-steps: &dev-prep-steps
     steps:
@@ -22,6 +24,16 @@ dev-prep-steps: &dev-prep-steps
               name: 'preppin for dev'
               command: |
                   echo 'preppin for dev'
+        - run:
+              name: save env
+              command: |
+                  cat $BASH_ENV > ~/.envvars
+
+        - persist_to_workspace:
+              root: ~/
+              paths:
+                  - .envvars
+
 
 stage-prep-steps: &stage-prep-steps
     steps:
@@ -31,20 +43,37 @@ stage-prep-steps: &stage-prep-steps
               name: 'preppin for stage'
               command: |
                   echo 'preppin for stage'
+        - run:
+              name: save env
+              command: |
+                  cat $BASH_ENV > ~/.envvars
+
+        - persist_to_workspace:
+              root: ~/
+              paths:
+                  - .envvars
 
 plan-steps: &plan-steps
     steps:
+        - attach_workspace:
+              at: ~/
+        - run: cat ~/.envvars >> $BASH_ENV
         - run:
               name: planning
               command: |
                 echo "now I'm planning hey"
+                echo "$POTATO"
 
 deploy-steps: &deploy-steps
     steps:
+        - attach_workspace:
+              at: ~/
+        - run: cat ~/.envvars >> $BASH_ENV
         - run:
               name: deploy
               command: |
                 echo "now I'm deploying hey"
+                echo "$POTATO"
 
 jobs:
     prep-dev:
