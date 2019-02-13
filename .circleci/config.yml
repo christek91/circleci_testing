@@ -34,16 +34,16 @@ stage-prep-steps: &stage-prep-steps
 
 plan-steps: &plan-steps
     steps:
-        run:
-            name: planning
-            command: |
+        - run:
+              name: planning
+              command: |
                 echo "now I'm planning hey"
 
 deploy-steps: &deploy-steps
     steps:
-        run:
-            name: deploy
-            command: |
+        - run:
+              name: deploy
+              command: |
                 echo "now I'm deploying hey"
 
 jobs:
