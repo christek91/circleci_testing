@@ -30,6 +30,7 @@ dev-prep-steps: &dev-prep-steps
         - run:
               name: save env
               command: |
+                  cat vars.txt
                   cat vars.txt > ~/.envvars
 
         - persist_to_workspace:
@@ -51,6 +52,7 @@ stage-prep-steps: &stage-prep-steps
         - run:
               name: save env
               command: |
+                  cat vars.txt
                   cat vars.txt > ~/.envvars
 
         - persist_to_workspace:
@@ -67,6 +69,7 @@ plan-steps: &plan-steps
               name: planning
               command: |
                 echo "now I'm planning hey"
+                ls -al ~
                 cat vars.txt
 
 deploy-steps: &deploy-steps
@@ -78,6 +81,7 @@ deploy-steps: &deploy-steps
               name: deploy
               command: |
                 echo "now I'm deploying hey"
+                ls -al ~
                 cat vars.txt
 
 jobs:
