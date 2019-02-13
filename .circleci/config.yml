@@ -5,12 +5,12 @@ kitchen-executor: &kitchen-executor
         - image: ubuntu:14.04
 
 set-dev-creds: &set-dev-creds
-    name: preppin for dev
+    name: creds for dev
     command: |
         echo 'this is dev'
 
-prep-stage: &prep-stage
-    name: preppin for stage
+set-stage-creds: &set-stage-creds
+    name: creds for stage
     command: |
         echo 'this is stage'
 
