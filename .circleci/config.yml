@@ -1,0 +1,97 @@
+---
+version: 2
+kitchen-executor: &kitchen-executor
+    docker:
+        - image: ubuntu:14.04
+
+set-dev-creds: &set-dev-creds
+    name: preppin for dev
+    command: |
+        echo 'this is dev'
+
+prep-stage: &prep-stage
+    name: preppin for stage
+    command: |
+        echo 'this is stage'
+
+dev-prep-steps: &dev-prep-steps
+    steps:
+        - run:
+              <<: *set-dev-creds
+        - run:
+              name: 'preppin for dev'
+              command: |
+                  echo 'preppin for dev'
+
+stage-prep-steps: &stage-prep-steps
+    steps:
+        - run:
+              <<: *set-stage-creds
+        - run:
+              name: 'preppin for stage'
+              command: |
+                  echo 'preppin for stage'
+
+plan-steps: &plan-steps
+    steps:
+        run:
+            name: planning
+            command: |
+                echo "now I'm planning hey"
+
+deploy-steps: &deploy-steps
+    steps:
+        run:
+            name: deploy
+            command: |
+                echo "now I'm deploying hey"
+
+jobs:
+    prep-dev:
+        <<: *kitchen-executor
+        working_directory: ~/
+        <<: *dev-prep-steps
+
+    prep-stage:
+        <<: *kitchen-executor
+        working_directory: ~/
+        <<: *stage-prep-steps
+
+    plan:
+        <<: *kitchen-executor
+        working_directory: ~/
+        <<: *plan-steps
+
+    deploy:
+        <<: *kitchen-executor
+        working_directory: ~/
+        <<: *deploy-steps
+
+filter_merge: &filter_merge
+    filters:
+        branches:
+            only:
+                - master
+
+workflows:
+    version: 2
+    provision-dev:
+        jobs:
+            - prep-dev:
+                  <<: *filter_merge
+            - plan:
+                  requires:
+                      - prep-dev
+            - deploy:
+                  requires:
+                      - plan
+    provision-stage:
+        jobs:
+            - prep-stage:
+                  <<: *filter_merge
+            - plan:
+                  requires:
+                      - prep-stage
+            - deploy:
+                  requires:
+                      - plan
